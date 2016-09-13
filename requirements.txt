@@ -1,0 +1,14 @@
+#
+####### requirements.txt #######
+#
+# pip requirements file for GRUV, install dependencies using pip via
+# pip install -r requirements.txt
+#
+# for requirements file format details see:
+# https://pip.pypa.io/en/stable/reference/pip_install/#requirements-file-format
+###### Requirements without Version Specifiers ######
+h5py    # interface to the HDF5 binary data format
+numpy   # fundamental python package for scientific computing
+scipy   # Open Source Library of Scientific Tools
+keras   # minimalist, highly modular neural networks
+theano  # define, optimize, and evaluate mathematical expressions involving multi-dimensional arrays efficiently
