@@ -24,13 +24,15 @@ def convert_mp3_to_wav(filename, sample_frequency):
     filename_tmp = tmp_path + '/' + orig_filename + '.mp3'
     new_name = new_path + '/' + orig_filename + '.wav'
     sample_freq_str = "{0:.1f}".format(float(sample_frequency) / 1000.0)
-    cmd = 'lame -a -m m {0} {1}'.format(quote(filename),
-                                        quote(filename_tmp))
-    os.system(cmd)
-    cmd = 'lame --decode {0} {1} --resample {2}'.format(
+    cmd = 'lame -a -m m {0} {1} --resample {2}'.format(
+        quote(filename),
         quote(filename_tmp),
-        quote(new_name),
         sample_freq_str
+    ) 
+    os.system(cmd)
+    cmd = 'lame --decode {0} {1}'.format(
+        quote(filename_tmp),
+        quote(new_name)
     )
     os.system(cmd)
     return new_name
