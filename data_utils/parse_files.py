@@ -6,12 +6,12 @@ from pipes import quote
 
 def convert_mp3_to_wav(filename, sample_frequency):
     ext = filename[-4:]
-    if(ext != '.mp3'):
+    if ext != '.mp3':
         return
     files = filename.split('/')
     orig_filename = files[-1][0:-4]
     new_path = ''
-    if(filename[0] == '/'):
+    if filename[0] == '/':
         new_path = '/'
     for i in xrange(len(files) - 1):
         new_path += files[i] + '/'
@@ -45,7 +45,7 @@ def convert_flac_to_wav(filename, sample_frequency):
     files = filename.split('/')
     orig_filename = files[-1][0:-5]
     new_path = ''
-    if(filename[0] == '/'):
+    if filename[0] == '/':
         new_path = '/'
     for i in xrange(len(files) - 1):
         new_path += files[i] + '/'
@@ -61,15 +61,15 @@ def convert_flac_to_wav(filename, sample_frequency):
 
 
 def convert_folder_to_wav(directory, sample_rate=44100):
-    for file in os.listdir(directory):
-        fullfilename = directory + file
-        if file.endswith('.mp3'):
-            convert_mp3_to_wav(filename=fullfilename,
-                               sample_frequency=sample_rate)
-        if file.endswith('.flac'):
-            convert_flac_to_wav(filename=fullfilename,
-                                sample_frequency=sample_rate)
-    return directory + 'wave/'
+	for r, d, f in os.walk(directory):
+		for n in f:
+			fullfilename = os.path.join(r, n)
+			if n.endswith('.mp3'):
+				name = convert_mp3_to_wav(filename=fullfilename, sample_frequency=sample_rate)
+			if n.endswith('.flac'):
+				name = convert_flac_to_wav(filename=fullfilename, sample_frequency=sample_rate)
+			print 'Converted %s to %s' % (fullfilename, name)
+	return directory + 'wave/'
 
 
 def read_wav_as_np(filename):
@@ -90,9 +90,9 @@ def convert_np_audio_to_sample_blocks(song_np, block_size):
     block_lists = []
     total_samples = song_np.shape[0]
     num_samples = 0
-    while(num_samples < total_samples):
+    while num_samples < total_samples:
         block = song_np[num_samples:num_samples + block_size]
-        if(block.shape[0] < block_size):
+        if block.shape[0] < block_size:
             padding = np.zeros((block_size - block.shape[0],))
             block = np.concatenate((block, padding))
         block_lists.append(block)
@@ -127,16 +127,16 @@ def fft_blocks_to_time_blocks(blocks_ft_domain):
     return time_blocks
 
 
-def wav_files_to_nptensor(directory, block_size, max_seq_len,
-                          out_file, max_files=20, useTimeDomain=False):
-    files = []
-    for file in os.listdir(directory):
-        if file.endswith('.wav'):
-            files.append(directory + file)
+def convert_wav_files_to_nptensor(directory, block_size, max_seq_len, out_file, max_files=20, useTimeDomain=False):
+	files = []
+	for r, d, f in os.walk(directory):
+		for n in f:
+			if n.endswith('.wav'):
+				files.append(os.path.join(r, n))
     chunks_X = []
     chunks_Y = []
     num_files = len(files)
-    if(num_files > max_files):
+    if num_files > max_files:
         num_files = max_files
     for file_idx in xrange(num_files):
         file = files[file_idx]
@@ -183,7 +183,7 @@ def wav_files_to_nptensor(directory, block_size, max_seq_len,
     print 'Done!'
 
 
-def nptensor_to_wav_files(tensor, indices, filename, useTimeDomain=False):
+def convert_nptensor_to_wav_files(tensor, indices, filename, useTimeDomain=False):
     num_seqs = tensor.shape[1]
     for i in indices:
         chunks = []
