@@ -17,5 +17,5 @@ max_seq_len = int(round((freq * clip_len) / block_size))
 new_directory = parse_files.convert_folder_to_wav(input_directory, freq)
 # Step 2 - convert WAVs to frequency domain
 # with mean 0 and standard deviation of 1
-parse_files.wav_files_to_nptensor(new_directory, block_size,
-                                  max_seq_len, output_filename)
+parse_files.convert_wav_files_to_nptensor(new_directory, block_size,
+                                          max_seq_len, output_filename)
